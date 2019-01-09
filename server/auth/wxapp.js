@@ -23,7 +23,9 @@ router.get('wxapp.callback', auth({ required: false }), async ctx => {
 
   if (!_teamId) {
     const tmpUser = await User.find({
-      serviceId: _id  
+      where: {
+        serviceId: _id,
+      },
     });
 
     if (tmpUser) { _teamId = tmpUser.teamId; }

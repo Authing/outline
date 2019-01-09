@@ -20,7 +20,7 @@ services:
       - ./fakes3:/fakes3_root
   outline:
     image: outline:v001
-    command: yarn dev
+    command: yarn start
     build:
       context: .
       dockerfile: Dockerfile

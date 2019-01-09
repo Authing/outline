@@ -5,7 +5,7 @@ up:
 	docker-compose logs -f outline
 
 build:
-	docker-compose build --pull outline
+	docker-compose build --pull outline  
 
 test:
 	docker-compose run --rm outline yarn test
