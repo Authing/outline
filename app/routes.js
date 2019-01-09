@@ -31,6 +31,9 @@ const DocumentNew = () => <Document newDocument />;
 const RedirectDocument = ({ match }: { match: Object }) => (
   <Redirect to={`/doc/${match.params.documentSlug}`} />
 );
+const RedirectDashboard = () => (
+  <Redirect to={`/dashboard`} />
+);
 
 export default function Routes() {
   return (
@@ -42,6 +45,7 @@ export default function Routes() {
           <Switch>
             <Route path="/dashboard/:tab" component={Dashboard} />
             <Route path="/dashboard" component={Dashboard} />
+            <Route path="/auth/:unknownId/dashboard" component={RedirectDashboard} />
             <Route exact path="/starred" component={Starred} />
             <Route exact path="/starred/:sort" component={Starred} />
             <Route exact path="/drafts" component={Drafts} />

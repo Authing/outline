@@ -19,10 +19,20 @@ router.get('wxapp.callback', auth({ required: false }), async ctx => {
 
   const hostname = _id;
 
-  if (teamId) {
+  let _teamId = teamId;
+
+  if (!_teamId) {
+    const tmpUser = await User.find({
+      serviceId: _id  
+    });
+
+    if (tmpUser) { _teamId = tmpUser.teamId; }
+  }
+
+  if (_teamId) {
     const teams = await Team.find({
       where: {
-        id: teamId,
+        id: _teamId,
       },
     });
 
@@ -54,7 +64,7 @@ router.get('wxapp.callback', auth({ required: false }), async ctx => {
         avatarUrl: photo,
       },
     });
-  
+
     const [user, isFirstSignin] = await User.findOrCreate({
       where: {
         service: 'wxapp',
@@ -68,7 +78,7 @@ router.get('wxapp.callback', auth({ required: false }), async ctx => {
         avatarUrl: photo,
       },
     });
-  
+ 
     if (isFirstUser) {
       await team.provisionFirstCollection(user.id);
       await team.provisionSubdomain(hostname);
