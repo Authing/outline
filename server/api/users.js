@@ -42,9 +42,9 @@ router.post('users.update', auth(), async ctx => {
   const endpoint = publicS3Endpoint();
 
   if (name) user.name = name;
-  if (avatarUrl && avatarUrl.startsWith(`${endpoint}/uploads/${user.id}`)) {
+  // if (avatarUrl && avatarUrl.startsWith(`${endpoint}/uploads/${user.id}`)) {
     user.avatarUrl = avatarUrl;
-  }
+  // }
 
   await user.save();
 
@@ -58,10 +58,18 @@ router.post('users.s3Upload', auth(), async ctx => {
   ctx.assertPresent(size, 'size is required');
 
   const s3Key = uuid.v4();
-  const key = `uploads/${ctx.state.user.id}_${s3Key}/${filename}`;
+  const keyPrefix =
+    process.env.AWS_S3_UPLOAD_BUCKET_URL === '/'
+      ? ''
+      : `${process.env.AWS_S3_UPLOAD_BUCKET_URL}/`;
+  const key = `${keyPrefix}uploads/${ctx.state.user.id}_${s3Key}/${filename}`;
   const policy = makePolicy();
   const endpoint = publicS3Endpoint();
-  const url = `${endpoint}/${key.replace('usercontents/outline-dev', '')}`;
+  const keyFiltered =
+    process.env.AWS_S3_UPLOAD_BUCKET_URL === '/'
+      ? key
+      : key.replace('process.env.AWS_S3_UPLOAD_BUCKET_URL', '');
+  const url = `${endpoint}/${keyFiltered}`;
 
   await Event.create({
     name: 'user.s3Upload',

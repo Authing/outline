@@ -25,9 +25,9 @@ router.post('team.update', auth(), async ctx => {
   if (name) team.name = name;
   if (sharing !== undefined) team.sharing = sharing;
   if (documentEmbeds !== undefined) team.documentEmbeds = documentEmbeds;
-  if (avatarUrl && avatarUrl.startsWith(`${endpoint}/uploads/${user.id}`)) {
+  // if (avatarUrl && avatarUrl.startsWith(`${endpoint}/uploads/${user.id}`)) {
     team.avatarUrl = avatarUrl;
-  }
+  // }
   await team.save();
 
   ctx.body = { data: await presentTeam(ctx, team) };
