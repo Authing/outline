@@ -72,11 +72,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(mount('/emails', emails));
 } else if (process.env.NODE_ENV === 'production') {
   // Force HTTPS on all pages
-  app.use(
-    enforceHttps({
-      trustProtoHeader: true,
-    })
-  );
+  if (process.env.ENFORCE_HTTPS === 'true' ) {
+    app.use(
+      enforceHttps({
+        trustProtoHeader: true,
+      })
+    );  
+  }
 
   // trust header fields set by our proxy. eg X-Forwarded-For
   app.proxy = true;
